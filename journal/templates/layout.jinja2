@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <link href="static/theme.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h1>PyJournal</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ request.route_url('home') }}"><h3>Home</h3></a></li>
+                    <li><a href="{{ request.route_url('create') }}"><h3>Create New Entry</h3></a></li>
+                </ul>
+            </nav>
+        </header>
+        <article>
+        {% block body %}
+        {% endblock %}
+        </article>
+        <footer>
+
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+    <h2>Entries:</h2>
+{% if entries %}
+    <ul>
+    {% for entry in entries %}
+        <li>
+            <h3><a href="{{ request.route_url('detail', id=entry.id) }}">{{ entry.title }}</a></h3>
+            <p>Created {{ entry.date }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>This journal has no entries!</p>
+{% endif %}
+{% endblock %}
