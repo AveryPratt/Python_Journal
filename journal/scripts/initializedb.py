@@ -1,6 +1,7 @@
 import os
 import sys
 import transaction
+import datetime
 
 from pyramid.paster import (
     get_appsettings,
@@ -41,5 +42,5 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        model = MyModel(name='one', value=1)
+        model = MyModel(title="Learning Journal | Day 1", date=datetime.datetime.now(), body="Samp")
         dbsession.add(model)
