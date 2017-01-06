@@ -3,4 +3,5 @@
     <h2>{{ entry.title }}</h2>
     <p>{{ entry.body }}</p>
     <p>{{ entry.date }}</p>
+    <a href="{{ request.route_url('update', id=entry.id) }}">Edit Entry</a>
 {% endblock %}

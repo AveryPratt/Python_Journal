@@ -2,8 +2,11 @@
 {% block body %}
     <form>
         <input type="text" value="{{ entry.title }}" />
-        <input type="text" value="{{ entry.date }}" />
-        <input type="text" value="{{ entry.body }}" />
+        <textarea rows="10" cols="100" value="{{ entry.body }}"></textarea>
         <input type="submit" value="Update Entry" />
     </form>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="{{ request.static_path('journal:static/app.js') }}">
+    </script>
 {% endblock %}

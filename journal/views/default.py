@@ -1,5 +1,7 @@
 import os
+import datetime
 from pyramid.response import Response
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
 from sqlalchemy.exc import DBAPIError
@@ -7,51 +9,60 @@ from sqlalchemy.exc import DBAPIError
 from ..models import MyModel
 
 
-HERE = os.path.dirname(__file__)
+# HERE = os.path.dirname(__file__)
 
-ENTRIES = [
-    {"title": "LJ - Day 10", "date": "Aug 19, 2016", "id": 10, "body": "Sample body text."},
-    {"title": "LJ - Day 11", "date": "Aug 22, 2016", "id": 11, "body": "Sample body text."},
-    {"title": "LJ - Day 12", "date": "Aug 23, 2016", "id": 12, "body": "Sample body text."},
-]
+# ENTRIES = [
+#     {"title": "LJ - Day 10", "date": "Aug 19, 2016", "id": 10, "body": "Sample body text."},
+#     {"title": "LJ - Day 11", "date": "Aug 22, 2016", "id": 11, "body": "Sample body text."},
+#     {"title": "LJ - Day 12", "date": "Aug 23, 2016", "id": 12, "body": "Sample body text."},
+# ]
 
 
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
-    # imported_text = open(os.path.join(HERE, 'data/home.html')).read()
-    # return imported_text
-    return {"entries": ENTRIES}
+    try:
+        query = request.dbsession.query(MyModel)
+        entries = query.all()
+    except DBAPIError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+    return {"entries": entries}
 
 
 @view_config(route_name='detail', renderer='templates/detail.jinja2')
 def detail(request):
-    # imported_text = open(os.path.join(HERE, 'data/detail.html')).read()
-    # return imported_text
-    return {"entry": ENTRIES[0]}
+    try:
+        query = request.dbsession.query(MyModel)
+        entry = query.filter(MyModel.id == request.matchdict["id"]).first()
+    except DBAPIError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+    return {"entry": entry}
 
 
 @view_config(route_name='create', renderer='templates/create.jinja2')
 def create(request):
-    # imported_text = open(os.path.join(HERE, 'data/create.html')).read()
-    # return imported_text
+    if request.method == "POST":
+        new_title = request.POST["title"]
+        new_post = request.POST["post"]
+        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        request.dbsession.add(new_model)
+        return HTTPFound(location=request.route_url("home"))
     return {}
 
 
 @view_config(route_name='update', renderer='templates/update.jinja2')
 def update(request):
-    # imported_text = open(os.path.join(HERE, 'data/update.html')).read()
-    # return imported_text
-    return {"entry": ENTRIES[0]}
-
-
-# @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-# def my_view(request):
-#     try:
-#         query = request.dbsession.query(MyModel)
-#         one = query.filter(MyModel.name == 'one').first()
-#     except DBAPIError:
-#         return Response(db_err_msg, content_type='text/plain', status=500)
-#     return {'one': one, 'project': 'journal'}
+    try:
+        query = request.dbsession.query(MyModel)
+        entry = query.filter(MyModel.id == request.matchdict["id"]).first()
+    except DBAPIError:
+        return Response(db_err_msg, content_type='text/plain', status=500)
+    if request.method == "POST":
+        new_title = request.POST["title"]
+        new_post = request.POST["post"]
+        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        request.dbsession.add(new_model)
+        return HTTPFound(location=request.route_url("home"))
+    return {"entry": entry}
 
 
 db_err_msg = """\

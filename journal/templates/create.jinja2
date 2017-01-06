@@ -2,8 +2,11 @@
 {% block body %}
     <form>
         <input type="text" placeholder="title" />
-        <input type="text" placeholder="date" />
-        <input type="text" placeholder="body" />
+        <textarea rows="10" cols="100" placeholder="Add entry..."></textarea>
         <input type="submit" value="Create New Entry" />
     </form>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="{{ request.static_path('journal:static/app.js') }}">
+    </script>
 {% endblock %}
