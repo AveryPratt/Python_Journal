@@ -39,9 +39,19 @@ def create(request):
 
 @view_config(route_name='update', renderer='templates/update.jinja2')
 def update(request):
-    # imported_text = open(os.path.join(HERE, 'data/update.html')).read()
-    # return imported_text
+    # # imported_text = open(os.path.join(HERE, 'data/update.html')).read()
+    # # return imported_text
     return {"entry": ENTRIES[0]}
+    # if request.method == "POST":
+    #     new_name = request.POST["name"]
+    #     new_val = request.POST["value"]
+    #     new_model = MyModel(name=new_name, value=new_val)
+
+    #     request.dbsession.add(new_model)
+
+    #     return {"data": {"name": "We made a new model!"}}
+
+    # return {"data": {"name": "A New Form"}}
 
 
 # @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
