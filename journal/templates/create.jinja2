@@ -6,3 +6,7 @@
         <input type="submit" value="Create New Entry" />
     </form>
 {% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="{{ request.static_path('journal:static/app.js') }}">
+    </script>
+{% endblock %}
