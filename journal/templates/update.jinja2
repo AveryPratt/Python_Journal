@@ -1,8 +1,9 @@
 {% extends "layout.jinja2" %}
 {% block body %}
-    <form>
-        <input type="text" value="{{ entry.title }}" />
-        <textarea rows="10" cols="100" value="{{ entry.body }}"></textarea>
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}" />
+        <input name="title" type="text" value="{{ entry.title }}" />
+        <textarea name="body" rows="10" cols="100" value="{{ entry.body }}"></textarea>
         <input type="submit" value="Update Entry" />
     </form>
 {% endblock %}

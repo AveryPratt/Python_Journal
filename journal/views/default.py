@@ -38,19 +38,21 @@ def detail(request):
     return {"entry": entry}
 
 
-@view_config(route_name='create', renderer='templates/create.jinja2')
+@view_config(route_name='create', renderer='templates/create.jinja2', permission='secret')
 def create(request):
+    check_csrf_token(request)
     if request.method == "POST":
         new_title = request.POST["title"]
-        new_post = request.POST["post"]
-        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        new_body = request.POST["body"]
+        new_model = MyModel(title=new_title, body=new_body, date=datetime.datetime.now())
         request.dbsession.add(new_model)
         return HTTPFound(location=request.route_url("home"))
     return {}
 
 
-@view_config(route_name='update', renderer='templates/update.jinja2')
+@view_config(route_name='update', renderer='templates/update.jinja2', permission='secret')
 def update(request):
+    check_csrf_token(request)
     try:
         query = request.dbsession.query(MyModel)
         entry = query.filter(MyModel.id == request.matchdict["id"]).first()
@@ -58,11 +60,28 @@ def update(request):
         return Response(db_err_msg, content_type='text/plain', status=500)
     if request.method == "POST":
         new_title = request.POST["title"]
-        new_post = request.POST["post"]
-        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        new_body = request.POST["body"]
+        new_model = MyModel(title=new_title, body=new_body, date=datetime.datetime.now())
         request.dbsession.add(new_model)
         return HTTPFound(location=request.route_url("home"))
     return {"entry": entry}
+
+
+@view_config(route_name='login', renderer='templates/login.jinja2')
+def login(request):
+    if request.method == 'POST':
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_credentials(username, password):
+            headers = remember(request, username)
+            return HTTPFound(location=request.route_url('home'), headers=headers)
+    return {}
+
+
+@view_config(route_name='logout')
+def logout(request):
+    headers = forget(request)
+    return HTTPFound(request.route_url('home'), headers=headers)
 
 
 db_err_msg = """\

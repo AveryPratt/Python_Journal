@@ -35,6 +35,7 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)
 
     engine = get_engine(settings)
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     session_factory = get_session_factory(engine)
@@ -48,7 +49,7 @@ def main(argv=sys.argv):
             MyModel(title="Learning Journal - Day 14", date=datetime.date(2016, 12, 23), body="Aside from making up work over the break, I'm also going to be thinking a lot about GerryPy, and how we're going to implement an algorithm and connect with an interface. We've already met once as a group, and gone over some ideas, for which technologies we want to pull our data from, as well as how to implement the algorithm. There still is a lot left to be decided, hopefully by the end of break, so we're going to stay in touch and do some more research."),
             MyModel(title="Learning Journal - Day 15", date=datetime.date(2017, 1, 2), body="The graph traversal was pretty straightforward, although I didn't catch up in the learning journal nearly as much as I had hoped to. That will probably be the biggest struggle this week. GerryPy is going well. We had a meeting to divide up and assign tasks to do before the project week officially starts. Our primary goal is to get everything set up and in place except for the actually algorithm that determines the shape of the districts."),
             MyModel(title="Learning Journal - Day 16", date=datetime.date(2017, 1, 3), body="This week it feels like I've set up a nice steady pace. I've still got more to catch up on, like usual, but the data structures are going smoothly, giving me more energy to put towards the learning journal. Our GerryPy group is also heading in an optimistic direction, and we have a solid plan on what to do before project week starts, as well as during."),
-            MyModel(title="Learning Journal - Day 17", date=datetime.date(2017, 1, 5), body="The learning journal is coming together bit by bit, but I still have to work out issues with the database and then add security, so I'll be very busy this weekend. Everything else is going rather well, especially GerryPy. Our group sounds interested in presenting at the next Puppy meetup, but we're going to wait until we get a bit more work done to decide for sure.")
+            MyModel(title="Learning Journal - Day 17", date=datetime.date(2017, 1, 5), body="The learning journal is coming together bit by bit, but I still have to work out issues with the database and then add security, so I'll be very busy this weekend. Everything else is going rather well, especially GerryPy. Our group sounds interested in presenting at the next Puppy\n\n meetup, but we're going to wait until we get a bit more work done to decide for sure.")
         ]
 
         dbsession.add_all(entries)
