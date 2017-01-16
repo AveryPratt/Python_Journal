@@ -42,8 +42,8 @@ def detail(request):
 def create(request):
     if request.method == "POST":
         new_title = request.POST["title"]
-        new_post = request.POST["post"]
-        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        new_body = request.POST["body"]
+        new_model = MyModel(title=new_title, body=new_body, date=datetime.datetime.now())
         request.dbsession.add(new_model)
         return HTTPFound(location=request.route_url("home"))
     return {}
@@ -58,8 +58,8 @@ def update(request):
         return Response(db_err_msg, content_type='text/plain', status=500)
     if request.method == "POST":
         new_title = request.POST["title"]
-        new_post = request.POST["post"]
-        new_model = MyModel(title=new_title, body=new_post, date=datetime.datetime.now())
+        new_body = request.POST["body"]
+        new_model = MyModel(title=new_title, body=new_body, date=datetime.datetime.now())
         request.dbsession.add(new_model)
         return HTTPFound(location=request.route_url("home"))
     return {"entry": entry}

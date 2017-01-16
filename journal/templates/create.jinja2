@@ -1,8 +1,8 @@
 {% extends "layout.jinja2" %}
 {% block body %}
-    <form>
-        <input type="text" placeholder="title" />
-        <textarea rows="10" cols="100" placeholder="Add entry..."></textarea>
+    <form method="post">
+        <input name="title" type="text" placeholder="title" />
+        <textarea name="body" rows="10" cols="100" placeholder="Add entry..."></textarea>
         <input type="submit" value="Create New Entry" />
     </form>
 {% endblock %}
