@@ -40,6 +40,7 @@ def detail(request):
 
 @view_config(route_name='create', renderer='templates/create.jinja2', permission='secret')
 def create(request):
+    check_csrf_token(request)
     if request.method == "POST":
         new_title = request.POST["title"]
         new_body = request.POST["body"]
@@ -51,6 +52,7 @@ def create(request):
 
 @view_config(route_name='update', renderer='templates/update.jinja2', permission='secret')
 def update(request):
+    check_csrf_token(request)
     try:
         query = request.dbsession.query(MyModel)
         entry = query.filter(MyModel.id == request.matchdict["id"]).first()

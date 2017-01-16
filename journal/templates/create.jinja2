@@ -1,6 +1,7 @@
 {% extends "layout.jinja2" %}
 {% block body %}
     <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}" />
         <input name="title" type="text" placeholder="title" />
         <textarea name="body" rows="10" cols="100" placeholder="Add entry..."></textarea>
         <input type="submit" value="Create New Entry" />
