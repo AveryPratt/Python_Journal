@@ -38,7 +38,7 @@ def detail(request):
     return {"entry": entry}
 
 
-@view_config(route_name='create', renderer='templates/create.jinja2')
+@view_config(route_name='create', renderer='templates/create.jinja2', permission='secret')
 def create(request):
     if request.method == "POST":
         new_title = request.POST["title"]
@@ -49,7 +49,7 @@ def create(request):
     return {}
 
 
-@view_config(route_name='update', renderer='templates/update.jinja2')
+@view_config(route_name='update', renderer='templates/update.jinja2', permission='secret')
 def update(request):
     try:
         query = request.dbsession.query(MyModel)
@@ -63,6 +63,23 @@ def update(request):
         request.dbsession.add(new_model)
         return HTTPFound(location=request.route_url("home"))
     return {"entry": entry}
+
+
+@view_config(route_name='login', renderer='templates/login.jinja2')
+def login(request):
+    if request.method == 'POST':
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_credentials(username, password):
+            headers = remember(request, username)
+            return HTTPFound(location=request.route_url('home'), headers=headers)
+    return {}
+
+
+@view_config(route_name='logout')
+def logout(request):
+    headers = forget(request)
+    return HTTPFound(request.route_url('home'), headers=headers)
 
 
 db_err_msg = """\
